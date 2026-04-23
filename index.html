@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Banco de Sangre – Centro de Donación</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="layout">
+
+  <aside class="panel-izquierdo">
+    <div class="logos">
+      <img src="assets/logo-FC.png">
+    </div>
+
+    <h1>BANCO DE SANGRE</h1>
+    <h2>CENTRO DE DONACIÓN</h2>
+
+    <img src="assets/corazon azul.png">
+  </aside>
+
+  <main class="panel-derecho">
+    <p>SÁLVA VIDAS · DONA SANGRE</p>
+
+    <form id="formMensaje">
+      <textarea id="message" required></textarea>
+      <input id="number" required maxlength="10">
+      <button type="submit">Enviar Mensaje</button>
+    </form>
+
+    <p id="respuesta"></p>
+  </main>
+
+</div>
+
+<script src="./app.js"></script> <!-- IMPORTANTE -->
+</body>
+</html>

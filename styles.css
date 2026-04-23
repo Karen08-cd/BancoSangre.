@@ -1,0 +1,156 @@
+:root {
+  --azul: #002D72;
+  --rojo: #E40046;
+  --blanco: #FFFFFF;
+  --gris: #F4F6F9;
+  --borde: #D0D7E2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Prompt", sans-serif;
+}
+
+body {
+  background: var(--white);
+}
+
+/* Layout general */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  gap: 0S;
+}
+
+/* PANEL IZQUIERDO */
+.panel-izquierdo {
+  
+position: relative;
+  z-index: 2; /* el azul manda */
+  width: 45%;
+  background: var(--azul);
+  color: white;
+  padding: 32px;
+  display: flex;
+  flex-direction: column; 
+  justify-content: space-between;   
+
+  /* BORDE CURVO */
+  border-bottom-right-radius: 160px;
+}
+
+
+.logos {
+  display: flex;
+  align-items:center;
+  gap: 20px;  
+}
+
+.logo-FC { 
+  position: relative;
+  height: 75.59px;
+  top: -20px; 
+ }
+
+
+.titulos h1 {
+  margin-top: 80px;
+   margin-left: 90px;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.titulos h2 {
+   margin-left: 90px;   
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+.logo-corazon {
+  margin-left: 90px;
+  margin-top: 20px;
+}
+
+/* PANEL DERECHO */
+.panel-derecho {
+  width: 55%;
+  background: white;
+  padding: 60px; 
+  position: relative;
+  z-index: 1;
+ 
+
+}
+
+.lema {
+  color: var(--azul);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.texto {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+label {
+  display: block;
+  color: var(--azul);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+textarea,
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 2px solid var(--borde);
+  margin-bottom: 20px;
+}
+
+textarea {
+  height: 90px;
+  resize: none;
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
+  border-color: var(--azul);
+}
+
+/* BOTONES */
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 30px;
+  border: none;
+  font-weight: 600;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  background: var(--azul);
+  margin-bottom: 12px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.btn-wsp {
+  background: #25D366;
+}
+
+.btn-campania {
+  background: var(--rojo);
+}
+
+#respuesta {
+  margin-top: 12px;
+  font-weight: 500;
+}

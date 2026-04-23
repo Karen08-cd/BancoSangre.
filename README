@@ -1,0 +1,165 @@
+Banco de Sangre – Centro de Donación
+Sistema de envío de mensajes SMS a donantes
+Este proyecto corresponde a una aplicación web desarrollada para el Banco de Sangre, cuyo objetivo es registrar mensajes y números telefónicos y enviar notificaciones por SMS a donantes utilizando el proveedor LIWA.
+
+Arquitectura del sistema
+
+Frontend (HTML, CSS, JS)
+        ↓
+Backend API (Node.js + Express)
+        ↓
+Proveedor SMS (LIWA API)
+        ↓
+Celular del donante (+57)
+
+
+Frontend (HTML/JS)
+   │
+   ▼
+Backend (Express)
+   │  ← aquí va api-key
+   ▼
+LIWA API (https://api.liwa.co/…)
+
+
+Estructura del proyecto
+FRONT BANCO DE SANGRE
+│
+├── Backend API
+│   ├── node_modules
+│   ├── .env
+│   ├── mensajes.xlsx
+│   ├── package.json
+│   ├── package-lock.json
+│   └── server.js
+│
+├── Frontend
+│   ├── assets
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+│
+└── README.md
+
+
+rontend
+El frontend es una interfaz web desarrollada con:
+
+HTML
+CSS (colores institucionales y tipografía Prompt)
+JavaScript
+
+Funcionalidades del Frontend
+
+Captura de:
+
+Mensaje
+Número telefónico
+
+
+Validación básica del número (10 dígitos, empieza por 3)
+Envío de datos al backend mediante fetch
+Mensajes de confirmación o error al usuario
+
+Flujo del Frontend
+
+El usuario escribe el mensaje y el número telefónico.
+El formulario envía los datos al backend:
+
+Guarda el registro en Excel
+Envía el SMS usando la API de LIWA
+
+
+
+
+⚙️ Backend API
+El backend está construido con:
+
+Node.js
+Express
+Axios (para consumir la API de LIWA)
+xlsx (para manejo de Excel)
+dotenv (variables de entorno)
+
+Funciones principales
+
+Guardar mensajes y teléfonos en un archivo Excel (mensajes.xlsx)
+Exponer endpoints REST
+Enviar SMS reales a través de LIWA
+
+
+Variables de entorno (.env)
+LIWA_API_KEY=TU_API_KEY_REAL_DE_LIWA
+LIWA_SENDER=BancoSangre
+
+Endpoints disponibles
+POST /api/mensajes
+
+Body (JSON):
+{
+  "telefono": "3001234567",
+  "mensaje": "Mensaje de prueba"
+}
+
+Consultar mensajes guardados
+GET /api/mensajes
+
+Formato desde el Frontend
+{
+  "telefono": "3001234567",
+  "mensaje": "Donar sangre puede salvar vidas"
+}
+
+Conexión con la API de LIWA
+POST https://api.liwa.co/v2/sms/single
+
+Autenticación
+LIWA utiliza API KEY, enviada en el header HTTP:
+x-api-key: TU_API_KEY
+headers: {
+  "x-api-key": process.env.LIWA_API_KEY,
+  "Content 
+   }
+
+
+   Pruebas con Postman
+   node server.js     
+
+   Crear una petición en Postman:
+   POST http://localhost:3000/api/sms/enviar
+
+   Headers:
+   Content-Type: application/json
+
+   Body:
+   {
+  "number": "573124973985",
+  "message": "Prueba SMS desde Postman",
+  "type": 1
+}
+
+Respuesta esperada
+
+{
+  "success": true,
+  "messageId": "78d81b6e6c8a870b68d6085885b5fb9c07a071dc",
+  "info": "Solicitud aceptada por LIWA"
+}
+
+
+Conclusión
+Este proyecto implementa un flujo completo y funcional de:
+
+Interfaz web institucional
+Backend REST
+Persistencia en Excel
+Integración con un proveedor real de SMS (LIWA)
+Pruebas técnicas mediante Postman
+
+El sistema está preparado para ser utilizado en entornos reales, sujeto a la correcta configuración y habilitación del proveedor de mensajería.
+
+
+abrir 
+
+http://127.0.0.1:8080/
+http://192.168.36.192:8080/ 
