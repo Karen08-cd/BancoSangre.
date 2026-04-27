@@ -1,156 +1,146 @@
-:root {
-  --azul: #002D72;
-  --rojo: #E40046;
-  --blanco: #FFFFFF;
-  --gris: #F4F6F9;
-  --borde: #D0D7E2;
+:root{
+  --azul:#002D72;
+  --rojo:#E40046;
+  --gris:#f2f2f2;
+  --blanco:#ffffff;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Prompt", sans-serif;
+*{
+  margin:0;
+  padding:0;  
+  box-sizing:border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-body {
-  background: var(--white);
+body{
+  background:var(--gris);
 }
 
-/* Layout general */
-.layout {
-  display: flex;
-  min-height: 100vh;
-  gap: 0S;
-}
-
-/* PANEL IZQUIERDO */
-.panel-izquierdo {
-  
-position: relative;
-  z-index: 2; /* el azul manda */
-  width: 45%;
-  background: var(--azul);
-  color: white;
-  padding: 32px;
-  display: flex;
-  flex-direction: column; 
-  justify-content: space-between;   
-
-  /* BORDE CURVO */
-  border-bottom-right-radius: 160px;
-}
-
-
-.logos {
-  display: flex;
+/* NAVBAR */
+.navbar{
+  background:#fff;
+  padding:16px 40px;
+  display:flex;
   align-items:center;
-  gap: 20px;  
+  justify-content:space-between;
 }
 
-.logo-FC { 
-  position: relative;
-  height: 75.59px;
-  top: -20px; 
- }
-
-
-.titulos h1 {
-  margin-top: 80px;
-   margin-left: 90px;
-  font-size: 32px;
-  font-weight: 600;
+.logo{
+  height:50px;
 }
 
-.titulos h2 {
-   margin-left: 90px;   
-  margin-top: 8px;
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 1px;
+.nav-center{
+  display:flex;
+  gap:30px;
 }
 
-.logo-corazon {
-  margin-left: 90px;
-  margin-top: 20px;
+.nav-center a{
+  text-decoration:none;
+  color:var(--azul);
+  font-weight:600;
 }
 
-/* PANEL DERECHO */
-.panel-derecho {
-  width: 55%;
-  background: white;
-  padding: 60px; 
-  position: relative;
-  z-index: 1;
- 
-
+/* MAIN GRID (HÍBRIDO PROFESIONAL) */
+.main{
+  display:grid;
+  grid-template-columns:42% 58%;
+  min-height:calc(100vh - 90px);
 }
 
-.lema {
-  color: var(--azul);
-  font-weight: 500;
-  margin-bottom: 16px;
+/* IZQUIERDA */
+.left{
+  background:var(--azul);
+  padding:40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  overflow:hidden;
 }
 
-.texto {
-  font-size: 18px;
-  margin-bottom: 30px;
+.banner{
+  background:var(--azul);
+  color: var(--blanco);
+  padding:30px;
+  font-size:60px;
+  font-weight:900;
+  line-height:0.9;
+  width:fit-content;
+  margin-bottom:40px;
 }
 
-label {
-  display: block;
-  color: var(--azul);
-  font-weight: 500;
-  margin-bottom: 6px;
+.osito{
+  max-width:100%;
+  max-height:420px;
+  object-fit:contain;
+  margin:0 auto;
+}
+
+/* DERECHA (FLEX FINO) */
+.right{
+  background:var(--gris);
+  padding:96px 80px;
+  display:flex;
+  justify-content:flex-end;
+  align-items:flex-start;
+}
+
+/* FORMULARIO */
+form{
+  width:420px;
 }
 
 textarea,
-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  border: 2px solid var(--borde);
-  margin-bottom: 20px;
+input{
+  width:100%;
+  padding:18px 20px;
+  margin-bottom:22px;
+  border:2px solid var(--rojo);
+  border-radius:14px;
+  font-size:16px;
 }
 
-textarea {
-  height: 90px;
-  resize: none;
+textarea{
+  resize:none;
+  height:96px;
 }
 
-textarea:focus,
-input:focus {
-  outline: none;
-  border-color: var(--azul);
+button{
+  width:100%;
+  background:linear-gradient(to right,#002D72,#034bb6);
+  color:#fff;
+  border:none;
+  padding:22px;
+  border-radius:40px;
+  font-size:20px;
+  font-weight:700;
+  cursor:pointer;
 }
 
-/* BOTONES */
-button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 30px;
-  border: none;
-  font-weight: 600;
-  font-size: 16px;
-  color: white;
-  cursor: pointer;
-  background: var(--azul);
-  margin-bottom: 12px;
+/* RESPONSIVE TABLET */
+@media(max-width:1000px){
+  .main{
+    grid-template-columns:1fr;
+  }
+
+  .right{
+    justify-content:center;
+    padding:64px 40px;
+  }
+
+  .banner{
+    font-size:42px;
+  }
 }
 
-button:hover {
-  opacity: 0.9;
+/* RESPONSIVE MOBILE */
+@media(max-width:768px){
+  .right{
+    padding:48px 24px;
+  }
+
+  form{
+    width:100%;
+    max-width:420px;
+  }
 }
 
-.btn-wsp {
-  background: #25D366;
-}
-
-.btn-campania {
-  background: var(--rojo);
-}
-
-#respuesta {
-  margin-top: 12px;
-  font-weight: 500;
-}

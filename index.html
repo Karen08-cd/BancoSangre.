@@ -2,39 +2,118 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Banco de Sangre – Centro de Donación</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Banco de Sangre | LaCardio</title>
 
-  <link rel="stylesheet" href="styles.css" />
+  <!-- ✅ ESTILOS ORIGINALES -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:,">
 </head>
+
 <body>
 
-<div class="layout">
+  <!-- ✅ NAVBAR -->
+  <header class="navbar">
+    <div class="nav-left">
+      <img src="assets/logo-lacardioblanco.png" alt="LaCardio" class="logo">
+    </div>
+    <nav class="nav-center">
+      <a href="#">Servicios</a>
+      <a href="#">Profesionales</a>
+      <a href="#">Docencia</a>
+      <a href="#">Conoce LaCardio</a>
+    </nav>
+  </header>
 
-  <aside class="panel-izquierdo">
-    <div class="logos">
-      <img src="assets/logo-FC.png">
+  <!-- ✅ CONTENIDO -->
+  <section class="main">
+
+    <!-- ✅ LADO IZQUIERDO -->
+    <div class="left">
+      <div class="banner">
+        BANC<img src="assets/ico-heart.svg" style="width:50px">
+        DE
+        <div class="bann">SANGRE</div>
+      </div>
+
+      <img src="assets/osito.png" class="osito">
     </div>
 
-    <h1>BANCO DE SANGRE</h1>
-    <h2>CENTRO DE DONACIÓN</h2>
+    <!-- ✅ LADO DERECHO -->
+    <div class="right">
 
-    <img src="assets/corazon azul.png">
-  </aside>
+      <!-- ✅ FORMULARIO PRINCIPAL -->
+      <form id="formMensaje" class="enviar">
 
-  <main class="panel-derecho">
-    <p>SÁLVA VIDAS · DONA SANGRE</p>
+        <!-- MENSAJE -->
+        <textarea
+          id="message"
+          placeholder="Escribe tu mensaje..."
+          required
+        ></textarea>
 
-    <form id="formMensaje">
-      <textarea id="message" required></textarea>
-      <input id="number" required maxlength="10">
-      <button type="submit">Enviar Mensaje</button>
-    </form>
+        <!-- EXCEL -->
+        <input
+          id="excel"
+          type="file"
+          accept=".xlsx,.xls"
+        >
 
-    <p id="respuesta"></p>
-  </main>
+        <!-- NÚMERO INDIVIDUAL -->
+        <input
+          id="number"
+          type="text"
+          placeholder="Número"
+          maxlength="10"
+        
+        >
 
-</div>
+        <!-- BOTÓN -->
+        <button type="submit">
+          Enviar Mensaje
+        </button>
 
-<script src="./app.js"></script> <!-- IMPORTANTE -->
+      </form>
+
+      <!-- RESPUESTA -->
+      <p id="respuesta"></p>
+
+      <!-- ✅ PREVISUALIZACIÓN -->
+      <div id="previewContainer" style="display:none; margin-top:20px;">
+        <h4>Previsualización</h4>
+
+        <table style="width:100%; font-size:12px;">
+          <thead>
+            <tr>
+              <th>Fila</th>
+              <th>Fecha</th>
+              <th>Número</th>
+              <th>Correo</th>
+              <th>SMS</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody id="previewTable"></tbody>
+        </table>
+
+        <p id="resumen"></p>
+
+        <button id="btnEnviarMasivo" type="button">
+          Confirmar envío
+        </button>
+      </div>
+
+      <!-- ✅ PROGRESO -->
+      <div id="progreso" style="display:none; margin-top:15px;">
+        <progress id="barra" value="0" max="100"></progress>
+        <span id="porcentaje">0%</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ✅ JS -->
+  <script src="./app.js"></script>
+
 </body>
 </html>
