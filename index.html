@@ -3,117 +3,120 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Banco de Sangre | LaCardio</title>
-
-  <!-- ✅ ESTILOS ORIGINALES -->
+  <title>Banco de Sangre/LaCardio</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:,">
 </head>
 
 <body>
 
-  <!-- ✅ NAVBAR -->
-  <header class="navbar">
-    <div class="nav-left">
-      <img src="assets/logo-lacardioblanco.png" alt="LaCardio" class="logo">
+<header class="navbar">
+  <div class="nav-left">
+    <img src="assets/logo-lacardioblanco.png" class="logo">
+  </div>
+</header>
+
+<section class="main">
+
+  <!-- IZQUIERDA -->
+  <div class="left">
+    <div class="banner">
+      BANC<img src="assets/ico-heart.svg" style="width:50px">
+<div class="bann">DE SANGRE</div>
     </div>
-    <nav class="nav-center">
-      <a href="#">Servicios</a>
-      <a href="#">Profesionales</a>
-      <a href="#">Docencia</a>
-      <a href="#">Conoce LaCardio</a>
-    </nav>
-  </header>
+    <img src="assets/osito.png" class="osito">
+  </div>
 
-  <!-- ✅ CONTENIDO -->
-  <section class="main">
+  <!-- DERECHA -->
+  <div class="right">
+    <div class="menu-servicios">
 
-    <!-- ✅ LADO IZQUIERDO -->
-    <div class="left">
-      <div class="banner">
-        BANC<img src="assets/ico-heart.svg" style="width:50px">
-        DE
-        <div class="bann">SANGRE</div>
-      </div>
+      <!-- FORMULARIO UNIFICADO -->
+    
+        <summary> 📩 <strong> Enviar (SMS + Email)</strong> </summary>
 
-      <img src="assets/osito.png" class="osito">
-    </div>
+        <form id="formEnvioUnificado">
+          <textarea
+            id="smsMessage"
+            placeholder="Mensaje SMS..."
+            required
+          ></textarea>
 
-    <!-- ✅ LADO DERECHO -->
-    <div class="right">
+          <input
+            type="file"
+            id="excelUnificado"
+            accept=".xlsx,.xls"
+            required
+          >
 
-      <!-- ✅ FORMULARIO PRINCIPAL -->
-      <form id="formMensaje" class="enviar">
-
-        <!-- MENSAJE -->
-        <textarea
-          id="message"
-          placeholder="Escribe tu mensaje..."
-          required
-        ></textarea>
-
-        <!-- EXCEL -->
-        <input
-          id="excel"
-          type="file"
-          accept=".xlsx,.xls"
-        >
-
-        <!-- NÚMERO INDIVIDUAL -->
-        <input
-          id="number"
-          type="text"
-          placeholder="Número"
-          maxlength="10"
-        
-        >
-
-        <!-- BOTÓN -->
-        <button type="submit">
-          Enviar Mensaje
-        </button>
-
-      </form>
-
-      <!-- RESPUESTA -->
-      <p id="respuesta"></p>
-
-      <!-- ✅ PREVISUALIZACIÓN -->
-      <div id="previewContainer" style="display:none; margin-top:20px;">
-        <h4>Previsualización</h4>
-
-        <table style="width:100%; font-size:12px;">
-          <thead>
-            <tr>
-              <th>Fila</th>
-              <th>Fecha</th>
-              <th>Número</th>
-              <th>Correo</th>
-              <th>SMS</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody id="previewTable"></tbody>
-        </table>
-
-        <p id="resumen"></p>
-
-        <button id="btnEnviarMasivo" type="button">
-          Confirmar envío
-        </button>
-      </div>
-
-      <!-- ✅ PROGRESO -->
-      <div id="progreso" style="display:none; margin-top:15px;">
-        <progress id="barra" value="0" max="100"></progress>
-        <span id="porcentaje">0%</span>
-      </div>
+          <button type="submit">
+            Previsualizar Datos
+          </button>
+        </form>
+     
 
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ✅ JS -->
-  <script src="./app.js"></script>
+<!-- MODAL PREVIEW UNIFICADO -->
+<div id="modalPreview" class="modal-overlay" style="display:none;">
+  <div class="modal-card">
 
+    <div class="modal-header">
+      <h3>VERIFICA LOS DATOS ANTES DE ENVIAR </h3>
+      <button class="modal-close" id="cerrarPreview"> <strong> X</strong></button>
+    </div>
+
+    <div class="modal-body">
+      <table class="modal-table">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>SMS</th>
+            <th>Correo</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody id="previewTable"></tbody>
+      </table>
+    </div>
+
+    <div class="modal-footer">
+
+      <!-- CORAZÓN -->
+      <div class="heart-loader" id="heartLoader">
+        <svg viewBox="0 0 512 512" class="heart-svg">
+          <defs>
+            <clipPath id="heartClip">
+              <path d="M256 464 C256 464 32 288 32 160 C32 96 80 48 144 48 C192 48 224 80 256 112 C288 80 320 48 368 48 C432 48 480 96 480 160 C480 288 256 464 256 464"/>
+            </clipPath>
+          </defs>
+
+          <path d="M256 464 C256 464 32 288 32 160 C32 96 80 48 144 48 C192 48 224 80 256 112 C288 80 320 48 368 48 C432 48 480 96 480 160 C480 288 256 464 256 464" fill="#e0e0e0"/>
+
+          <rect
+            id="heartFill"
+            x="0"
+            y="512"
+            width="512"
+            height="512"
+            fill="#E40046"
+            clip-path="url(#heartClip)"
+          />
+        </svg>
+
+        <div class="heart-percent" id="heartPercent">0%</div>
+      </div>
+
+     <button id="btnConfirmar" class="btn-confirmar">
+  Confirmar envío
+</button> 
+    </div>
+
+  </div>
+</div>
+
+<script src="./app.js"></script>
 </body>
 </html>

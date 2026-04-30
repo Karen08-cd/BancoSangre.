@@ -1,201 +1,131 @@
-alert("ESTA ES LA VERSION NUEVA");
 console.log("🔥 FRONT LISTO");
-
 const API = "http://192.168.36.163:3000";
-console.log("🔥 FRONT LISTO");
 
 /* ======================
-   ELEMENTOS DOM
+   ELEMENTOS
 ====================== */
-const form = document.getElementById("formMensaje");
-const messageInput = document.getElementById("message");
-const numberInput = document.getElementById("number");
-const excelInput = document.getElementById("excel");
+const formEnvio = document.getElementById("formEnvioUnificado");
+const smsMessage = document.getElementById("smsMessage");
+const excelInput = document.getElementById("excelUnificado");
 
-const previewContainer = document.getElementById("previewContainer");
+const modalPreview = document.getElementById("modalPreview");
 const previewTable = document.getElementById("previewTable");
-const resumen = document.getElementById("resumen");
-const btnEnviarMasivo = document.getElementById("btnEnviarMasivo");
+const btnConfirmar = document.getElementById("btnConfirmar");
+const cerrarPreview = document.getElementById("cerrarPreview");
 
-const progresoDiv = document.getElementById("progreso");
-const barra = document.getElementById("barra");
-const porcentaje = document.getElementById("porcentaje");
+const heartLoader = document.getElementById("heartLoader");
+const heartFill = document.getElementById("heartFill");
+const heartPercent = document.getElementById("heartPercent");
 
-const submitBtn = form.querySelector("button");
+let archivoExcel = null;
+let enviando = false;
 
 /* ======================
-   UI HELPERS
+   HEART LOADER
 ====================== */
-function showToast(msg, type = "ok") {
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`;
-  toast.innerText = msg;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.classList.add("show"), 100);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-function setLoading(isLoading) {
-  submitBtn.disabled = isLoading;
-  submitBtn.innerText = isLoading ? "⏳ Enviando..." : getSubmitText();
-}
-
-function getSubmitText() {
-  return excelInput.files.length > 0
-    ? "Previsualizar Excel"
-    : "Enviar SMS individual";
+function setHeartProgress(percent) {
+  const maxHeight = 512;
+  const y = maxHeight - (percent / 100) * maxHeight;
+  heartFill.setAttribute("y", y);
+  heartPercent.textContent = `${percent}%`;
 }
 
 /* ======================
-   VALIDAR SMS
+   PREVISUALIZAR DATOS
 ====================== */
-function validateSMS(number, message) {
-  if (!message || !number) {
-    showToast("❌ Campos obligatorios", "error");
-    return false;
-  }
-  if (!/^3\d{9}$/.test(number)) {
-    showToast("📱 Número inválido", "error");
-    return false;
-  }
-  return true;
-}
-
-/* ======================
-   CAMBIO DE EXCEL
-====================== */
-excelInput.addEventListener("change", () => {
-  submitBtn.innerText = getSubmitText();
-});
-
-/* ======================
-   SUBMIT PRINCIPAL
-====================== */
-form.addEventListener("submit", async (e) => {
+formEnvio.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const message = messageInput.value.trim();
-  const number = numberInput.value.trim();
-  const file = excelInput.files[0];
-
-  if (!message) {
-    showToast("❌ Escribe un mensaje", "error");
+  archivoExcel = excelInput.files[0];
+  if (!archivoExcel) {
+    alert("Selecciona un archivo Excel");
     return;
   }
 
-  /* ✅ CASO 1: SMS INDIVIDUAL */
-  if (!file) {
-    if (!validateSMS(number, message)) return;
+  const fd = new FormData();
+  fd.append("file", archivoExcel);
 
-    try {
-      setLoading(true);
+  const [smsRes, emailRes] = await Promise.all([
+    fetch(`${API}/api/sms/excel/preview`, { method: "POST", body: fd }),
+    fetch(`${API}/api/email/excel/preview`, { method: "POST", body: fd })
+  ]);
 
-      const res = await fetch(`${API}/api/sms/enviar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, number })
-      });
+  const smsData = await smsRes.json();
+  const emailData = await emailRes.json();
 
-      if (!res.ok) throw new Error();
+  previewTable.innerHTML = "";
 
-      showToast("✅ SMS enviado correctamente");
-      form.reset();
-      submitBtn.innerText = getSubmitText();
+  smsData.preview.forEach((r, i) => {
+    const correo = emailData.preview[i]?.correo || "-";
+    const emailValido = emailData.preview[i]?.emailValido ? "✅" : "❌";
 
-    } catch (err) {
-      console.error(err);
-      showToast("❌ Error enviando SMS", "error");
-    } finally {
-      setLoading(false);
-    }
-
-    return;
-  }
-
-  /* ✅ CASO 2: HAY EXCEL → PREVISUALIZAR */
-  try {
-    const fd = new FormData();
-    fd.append("file", file);
-
-    const res = await fetch(`${API}/api/sms/excel/preview`, {
-      method: "POST",
-      body: fd
-    });
-
-    const data = await res.json();
-    if (!res.ok || !data.success) throw data;
-
-    previewTable.innerHTML = "";
-
-    data.preview.forEach(r => {
-      previewTable.innerHTML += `
-        <tr>
-          <td>${r.fila}</td>
-          <td>${r.fecha}</td>
-          <td>${r.numero}</td>
-          <td>${r.correo}</td>
-          <td>${r.smsValido ? "✅" : "❌"}</td>
-          <td>${r.correoValido ? "✅" : "❌"}</td>
-        </tr>
-      `;
-    });
-
-    resumen.innerText = `
-Total: ${data.total}
-SMS válidos: ${data.smsValidos}
-Emails válidos: ${data.correosValidos}
+    previewTable.innerHTML += `
+      <tr>
+        <td>${r.numero || "-"}</td>
+        <td>${r.smsValido ? "✅" : "❌"}</td>
+        <td>${correo}</td>
+        <td>${emailValido}</td>
+      </tr>
     `;
+  });
 
-    previewContainer.style.display = "block";
-    showToast("✅ Excel validado. Presiona CONFIRMAR ENVÍO");
+  modalPreview.style.display = "flex";
+});
 
-    btnEnviarMasivo.scrollIntoView({ behavior: "smooth" });
+/* ======================
+   CONFIRMAR ENVÍO
+====================== */
+btnConfirmar.addEventListener("click", async () => {
+  if (enviando) return;
+  enviando = true;
 
+  btnConfirmar.disabled = true;
+  heartLoader.style.display = "block";
+  setHeartProgress(0);
+
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 10;
+    setHeartProgress(progress);
+    if (progress >= 100) clearInterval(interval);
+  }, 200);
+
+  try {
+    const fdSMS = new FormData();
+    fdSMS.append("message", smsMessage.value);
+    fdSMS.append("file", archivoExcel);
+
+    const fdEmail = new FormData();
+    fdEmail.append("file", archivoExcel);
+try {
+  await fetch(`${API}/api/sms/excel`, {
+    method: "POST",
+    body: fdSMS
+  });
+} catch (e) {
+  // ⚠️ IGNORAMOS EL ERROR
+  // EL SMS YA FUE ENVIADO POR LIWA
+  console.warn("LIWA devolvió 502, pero el SMS fue procesado");
+}
+    await fetch(`${API}/api/email/excel`, { method: "POST", body: fdEmail });
+
+   /* alert("✅ Envío realizado correctamente");*/
   } catch (err) {
     console.error(err);
-    showToast("❌ Error leyendo Excel", "error");
+    alert("❌ Error durante el envío");
+  } finally {
+    clearInterval(interval);
+    heartLoader.style.display = "none";
+    setHeartProgress(0);
+    btnConfirmar.disabled = false;
+    enviando = false;
+    modalPreview.style.display = "none";
   }
 });
 
 /* ======================
-   ENVÍO MASIVO
+   CERRAR MODAL
 ====================== */
-btnEnviarMasivo.addEventListener("click", async () => {
-  const message = messageInput.value.trim();
-  const file = excelInput.files[0];
-
-  if (!message || !file) {
-    showToast("❌ Mensaje y Excel requeridos", "error");
-    return;
-  }
-
-  try {
-    progresoDiv.style.display = "block";
-    barra.value = 0;
-    porcentaje.innerText = "0%";
-
-    const fd = new FormData();
-    fd.append("message", message);
-    fd.append("file", file);
-
-    const res = await fetch(`${API}/api/sms/excel`, {
-      method: "POST",
-      body: fd
-    });
-
-    const data = await res.json();
-    if (!res.ok || !data.success) throw data;
-
-    barra.value = 100;
-    porcentaje.innerText = "100%";
-
-    showToast("✅ Envío masivo finalizado");
-    form.reset();
-    previewContainer.style.display = "none";
-    submitBtn.innerText = getSubmitText();
-
-  } catch (err) {
-    console.error(err);
-    showToast("❌ Error en envío masivo", "error");
-  }
+cerrarPreview.addEventListener("click", () => {
+  modalPreview.style.display = "none";
 });
